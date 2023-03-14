@@ -5,41 +5,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { BASE_URL_IMAGE } from "../constants/movie";
 import { modalState, movieState } from "../recoil/ModalRecoil";
 import { Movie } from "../types/Movie";
+import BackgroundImage from "./BackgroundImage";
 import Modal from "./Modal";
-
-const StyledImageBackground = styled(Image)`
-  z-index: -10;
-  max-height: 92vh;
-  width: 100vw;
-
-  @media screen and (max-width: 576px) {
-    max-height: 70vh;
-  }
-  @media screen and (max-width: 976px) {
-    max-height: 70vh;
-  }
-`;
-
-const StyledLinner1 = styled.div`
-  background: linear-gradient(
-    179.79deg,
-    rgba(26, 29, 41, 0) 15.81%,
-    rgba(26, 29, 41, 0.791667) 64.73%,
-    #1a1d29 97.83%
-  );
-  height: 92vh;
-
-  @media screen and (max-width: 576px) {
-    height: 70vh;
-  }
-
-  @media screen and (max-width: 976px) {
-    height: 70vh;
-  }
-`;
 
 const StyledInfoMovie = styled.div`
   max-width: 750px;
@@ -116,7 +85,7 @@ const StyledDetail = styled.div`
 const Banner = ({ netflixOriginals }: { netflixOriginals: Movie[] }) => {
   const [movie, setMovie] = useState<Movie | null>(null);
 
-  const [currentMovie, setCurrentMovie] = useRecoilState(movieState);
+  const [_currentMovie, setCurrentMovie] = useRecoilState(movieState);
 
   useEffect(() => {
     setMovie(
@@ -128,15 +97,7 @@ const Banner = ({ netflixOriginals }: { netflixOriginals: Movie[] }) => {
 
   return (
     <>
-      <div>
-        <StyledImageBackground
-          src={`${BASE_URL_IMAGE}${movie?.backdrop_path || movie?.poster_path}`}
-          alt={movie?.title || "alt"}
-          fill
-        />
-        <StyledLinner1 />
-      </div>
-
+      <BackgroundImage movie={movie} />
       <Container maxWidth="xl">
         <StyledInfoMovie>
           <StyledDetail>
@@ -160,8 +121,6 @@ const Banner = ({ netflixOriginals }: { netflixOriginals: Movie[] }) => {
         </StyledInfoMovie>
       </Container>
       {/* Header */}
-
-      <Modal />
     </>
   );
 };

@@ -9,6 +9,7 @@ import { RecoilRoot } from "recoil";
 import { auth, db } from "../configs/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import Login from "./login";
+import Modal from "../components/Modal";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [loggedInUser, loading, _error] = useAuthState(auth);
@@ -17,6 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   // const [loading, setLoading] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+
   useEffect(() => {
     const getUserInDb = async () => {
       try {
@@ -38,34 +40,34 @@ export default function App({ Component, pageProps }: AppProps) {
 
     if (loggedInUser) {
       getUserInDb();
-      setHasMounted(true);
     }
   }, [loggedInUser]);
 
-  // useEffect(() => {
-  //   const handleStart = (url: string) =>
-  //     url !== router.asPath && setHasMounted(true);
-  //   const handleComplete = (url: string) =>
-  //     url === router.asPath && setHasMounted(false);
+  useEffect(() => {
+    const handleStart = (url: string) =>
+      url !== router.asPath && setHasMounted(true);
+    const handleComplete = (url: string) =>
+      url === router.asPath && setHasMounted(false);
 
-  //   router.events.on("routeChangeStart", handleStart);
-  //   router.events.on("routeChangeComplete", handleComplete);
-  //   router.events.on("routeChangeError", handleComplete);
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
 
-  //   return () => {
-  //     router.events.off("routeChangeStart", handleStart);
-  //     router.events.off("routeChangeComplete", handleComplete);
-  //     router.events.off("routeChangeError", handleComplete);
-  //   };
-  // }, [router.asPath, router.events]);
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router.asPath, router.events]);
 
-  if (loading) return <Loading />;
+  if (loading || hasMounted) return <Loading />;
 
   if (!loggedInUser) return <Login />;
 
   return (
     <RecoilRoot>
       <Component {...pageProps} />
+      <Modal />
     </RecoilRoot>
   );
 }

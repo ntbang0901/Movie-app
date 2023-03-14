@@ -5,6 +5,7 @@ export interface Movie {
   release_date?: string;
   first_air_date: string;
   genre_ids: number[];
+  genres: Genre[];
   id: number;
   name: string;
   origin_country: string[];

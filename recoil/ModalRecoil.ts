@@ -2,7 +2,7 @@ import { atom } from "recoil";
 import { Movie } from "../types/Movie";
 
 export const modalState = atom({
-  key: "modelState",
+  key: "modalState",
   default: false,
 });
 

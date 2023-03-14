@@ -10,22 +10,19 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
 import { signOut } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
 import { auth } from "../configs/firebase";
+import SearchBox from "./SearchBar";
 
-const pages = [
-  { name: "Trang chủ", to: "/" },
-  { name: "Thể loại", to: "/category" },
-  { name: "Phim bộ", to: "/phimbo" },
-  { name: "Phim lẻ", to: "/phimle" },
-  { name: "Blogs", to: "/blog" },
-];
+const pages = [{ name: "Trang chủ", to: "/" }];
 const settings = [
   { name: "Logout", fuc: async () => signOut(auth) },
   { name: "Trang chủ" },
@@ -57,6 +54,7 @@ const StyledAppBar = styled(AppBar)`
 function NavbarHeader() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [loggedInUser, _loading, _error] = useAuthState(auth);
 
   const router = useRouter();
 
@@ -75,9 +73,7 @@ function NavbarHeader() {
     setAnchorElUser(null);
   };
 
-  const logout = async () => {
-    signOut(auth);
-  };
+  console.log(loggedInUser?.photoURL);
 
   return (
     <StyledAppBar
@@ -102,7 +98,12 @@ function NavbarHeader() {
               color: "inherit",
               textDecoration: "none",
             }}>
-            <Image src={logo} alt="logo" height={50} />
+            <Image
+              src={logo}
+              alt="logo"
+              height={50}
+              style={{ marginBottom: "16px" }}
+            />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -154,10 +155,15 @@ function NavbarHeader() {
               color: "inherit",
               textDecoration: "none",
             }}>
-            <Image src={logo} alt="logo" height={50} />
+            <Image
+              src={logo}
+              alt="logo"
+              height={50}
+              style={{ marginBottom: "16px" }}
+            />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page, index) => (
+            {pages.map((page) => (
               <Link href={page.to} key={page.name} passHref>
                 <Button
                   className={router.asPath === page.to ? "active" : ""}
@@ -173,13 +179,14 @@ function NavbarHeader() {
               </Link>
             ))}
           </Box>
+          <SearchBox />
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <StyledUserAvatar
                   alt="Remy Sharp"
-                  src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/331991700_1610927012677674_4696109151596168324_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=N38AZYXr0GUAX8WYm4m&_nc_oc=AQmFxa-IkKyC_6JCH-W0uySPLtCIQroM32pitDD05xrbopMCY-6pdMRhbT2LYUGV3xk&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCBtO1h0M7bYiPYdgZ6h0M4Dm0BLN_MgasV4yu8gc0eog&oe=640C5E40"
+                  src={loggedInUser?.photoURL as string}
                 />
               </IconButton>
             </Tooltip>
