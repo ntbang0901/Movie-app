@@ -2,6 +2,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import PlayIcon from "@mui/icons-material/PlayCircle";
 import { Container } from "@mui/system";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -109,14 +110,12 @@ const Banner = ({ netflixOriginals }: { netflixOriginals: Movie[] }) => {
               <PlayIcon />
               <span>PLAY</span>
             </StyledButton>
-            <StyledButton
-              onClick={() => {
-                setShowModal(true);
-                setCurrentMovie(movie);
-              }}>
-              <InfoIcon />
-              <span> MORE INFORMATION</span>
-            </StyledButton>
+            <Link href={`/movie/${movie?.id}`}>
+              <StyledButton>
+                <InfoIcon />
+                <span> MORE INFORMATION</span>
+              </StyledButton>
+            </Link>
           </StyledActions>
         </StyledInfoMovie>
       </Container>
