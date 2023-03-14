@@ -1,7 +1,6 @@
 import InfoIcon from "@mui/icons-material/Info";
 import PlayIcon from "@mui/icons-material/PlayCircle";
 import { Container } from "@mui/system";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -9,7 +8,6 @@ import styled from "styled-components";
 import { modalState, movieState } from "../recoil/ModalRecoil";
 import { Movie } from "../types/Movie";
 import BackgroundImage from "./BackgroundImage";
-import Modal from "./Modal";
 
 const StyledInfoMovie = styled.div`
   max-width: 750px;
@@ -86,7 +84,7 @@ const StyledDetail = styled.div`
 const Banner = ({ netflixOriginals }: { netflixOriginals: Movie[] }) => {
   const [movie, setMovie] = useState<Movie | null>(null);
 
-  const [_currentMovie, setCurrentMovie] = useRecoilState(movieState);
+  const [_currentMovie, _setCurrentMovie] = useRecoilState(movieState);
 
   useEffect(() => {
     setMovie(
@@ -94,7 +92,7 @@ const Banner = ({ netflixOriginals }: { netflixOriginals: Movie[] }) => {
     );
   }, [netflixOriginals]);
 
-  const [_showModal, setShowModal] = useRecoilState(modalState);
+  const [_showModal, _setShowModal] = useRecoilState(modalState);
 
   return (
     <>

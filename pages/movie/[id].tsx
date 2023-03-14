@@ -10,17 +10,17 @@ import {
 import BackgroundImage from "../../components/BackgroundImage";
 import Layout from "../../components/Layout";
 
-import { Tooltip } from "@mui/material";
-import PlayIcon from "@mui/icons-material/PlayArrow";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import PlayIcon from "@mui/icons-material/PlayArrow";
 import StarIcon from "@mui/icons-material/Star";
+import { Tooltip } from "@mui/material";
 
-import { Movie } from "../../types/Movie";
 import { useRecoilState } from "recoil";
-import { modalState, movieState } from "../../recoil/ModalRecoil";
 import Row from "../../components/Row";
+import { modalState, movieState } from "../../recoil/ModalRecoil";
+import { Movie } from "../../types/Movie";
 
 interface Props {
   movie: Movie;
@@ -258,24 +258,20 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   const id = context.params?.id;
   const type = context.query.type === "tv" ? "tv" : "movie";
 
-  let res;
-  let similar;
-  try {
-    if (type === "tv") {
-      similar = await getSimilarTV(parseInt(id as string));
-    } else {
-      similar = await getSimilarMovie(parseInt(id as string));
-    }
-    res = await fetchDetailMovieWithType(type, parseInt(id as string));
-  } catch (error) {
-    res = await getDetailMovie(id as string);
-    similar = await getSimilarMovie(parseInt(id as string));
-  }
+  // This version uses Promise.all() to parallelize the API calls for the movie and similar results.
+  // It also uses conditional ternary operators and destructuring assignment to simplify the code.
+  // Finally, it omits the try-catch block and instead uses Promise.catch() to handle API errors.
 
+  const [movieRes, similarRes] = await Promise.all([
+    fetchDetailMovieWithType(type, parseInt(id as string)).catch(() =>
+      getDetailMovie(id as string)
+    ),
+    (type === "tv" ? getSimilarTV : getSimilarMovie)(parseInt(id as string)),
+  ]);
   return {
     props: {
-      movie: res.data as Movie,
-      similar: similar.data.results,
+      movie: movieRes.data as Movie,
+      similar: similarRes.data.results,
     },
   };
 };

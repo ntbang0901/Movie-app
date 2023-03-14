@@ -88,11 +88,9 @@ const SearchBox = () => {
   };
 
   const handleSearchEnter: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (!text) return;
-      router.push(`search?q=${text}`);
-    }
+    if (event.key !== "Enter" || !text) return;
+    event.preventDefault();
+    router.push(`search?q=${text}`);
   };
 
   return (

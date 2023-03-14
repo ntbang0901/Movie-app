@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 import styled from "styled-components";
 import { BASE_URL_IMAGE } from "../constants/movie";
 import { Movie } from "../types/Movie";
