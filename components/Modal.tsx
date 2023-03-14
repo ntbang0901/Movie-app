@@ -182,7 +182,8 @@ const Modal = () => {
                     },
                   },
                 }}
-                muted={muted}
+                controls
+                muted={false}
               />
             )}
           </div>
