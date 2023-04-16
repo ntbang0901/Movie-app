@@ -62,8 +62,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
   if (loading || hasMounted) return <Loading />;
 
-  if (!loggedInUser) return <Login />;
-
   return (
     <RecoilRoot>
       <Component {...pageProps} />

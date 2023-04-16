@@ -23,11 +23,6 @@ import { auth } from "../configs/firebase";
 import SearchBox from "./SearchBar";
 
 const pages = [{ name: "Trang chủ", to: "/" }];
-const settings = [
-  { name: "Logout", fuc: async () => signOut(auth) },
-  { name: "Trang chủ" },
-  ,
-];
 
 const StyledUserAvatar = styled(Avatar)`
   border: 2px solid #02e7f5;
@@ -55,8 +50,18 @@ function NavbarHeader() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [loggedInUser, _loading, _error] = useAuthState(auth);
-
   const router = useRouter();
+
+  const settings = [
+    {
+      name: loggedInUser ? "Đăng xuất" : "Đăng nhập",
+      fuc: loggedInUser
+        ? async () => signOut(auth)
+        : () => router.push("/login"),
+    },
+    { name: "Trang chủ" },
+    ,
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);

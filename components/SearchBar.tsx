@@ -1,15 +1,12 @@
-import React, {
-  KeyboardEventHandler,
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import styled from "styled-components";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
-import Modal from "./Modal";
+import {
+  KeyboardEventHandler, useEffect,
+  useRef,
+  useState
+} from "react";
+import styled from "styled-components";
 
 const StyledSearchContainer = styled.div`
   margin-right: 20px;
